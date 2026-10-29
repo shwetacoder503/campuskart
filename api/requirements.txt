@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pymysql
+cryptography
+pydantic-settings
+bcrypt
+pyjwt
+Pillow
+python-multipart

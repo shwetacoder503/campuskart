@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sell an item | CampusKart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-mark">CK</span> CampusKart</a>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="my-listings.html">My listings</a>
+        <a href="wishlist.html">Wishlist</a>
+      </nav>
+      <div id="navAuth" class="nav-actions"></div>
+    </div>
+  </header>
+
+  <main class="auth-wrap">
+    <div class="auth-card form-card">
+      <h1>Sell an item</h1>
+      <p class="sub">Item ki sahi details daalo. Deal campus me in-person hoti hai.</p>
+
+      <div id="msg" class="form-msg" hidden></div>
+
+      <form id="sellForm" novalidate>
+        <div class="field">
+          <label for="title">Title</label>
+          <input id="title" type="text" maxlength="150" placeholder="Casio fx-991EX Calculator" required />
+        </div>
+
+        <div class="two-col">
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" required>
+              <option value="">Choose...</option>
+              <option value="BOOKS">Books</option>
+              <option value="CALCULATORS">Calculators</option>
+              <option value="LAB_GEAR">Lab gear</option>
+              <option value="HOSTEL">Hostel</option>
+              <option value="ELECTRONICS">Electronics</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="itemCondition">Condition</label>
+            <select id="itemCondition">
+              <option value="NEW">New</option>
+              <option value="LIKE_NEW">Like new</option>
+              <option value="GOOD" selected>Good</option>
+              <option value="FAIR">Fair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="price">Price (₹)</label>
+          <input id="price" type="text" inputmode="decimal" placeholder="650" required />
+          <div class="hint">Maximum ₹1,00,000, 2 decimal tak.</div>
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" rows="5" maxlength="2000" placeholder="Kitna purana hai, kya kya saath milega, kahan mil sakte ho..." required></textarea>
+          <div class="hint"><span id="counter">0</span> / 2000</div>
+        </div>
+
+        <button id="submitBtn" class="btn btn-brand btn-block" type="submit">Post item</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sell.js"></script>
+</body>
+</html>

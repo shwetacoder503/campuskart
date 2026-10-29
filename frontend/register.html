@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create account | CampusKart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-mark">CK</span> CampusKart</a>
+    </div>
+  </header>
+
+  <main class="auth-wrap">
+    <div class="auth-card">
+      <div id="formBox">
+        <h1>Create account</h1>
+        <p class="sub">Use your college email (@sggs.ac.in) to sign up.</p>
+
+        <div id="msg" class="form-msg" hidden></div>
+
+        <form id="registerForm" novalidate>
+          <div class="field">
+            <label for="fullName">Full name</label>
+            <input id="fullName" type="text" maxlength="100" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="email">College email</label>
+            <input id="email" type="email" placeholder="2024bcs503@sggs.ac.in" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required />
+            <div class="hint">At least 8 characters.</div>
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm password</label>
+            <input id="confirm" type="password" autocomplete="new-password" required />
+          </div>
+          <button id="submitBtn" class="btn btn-brand btn-block" type="submit">Create account</button>
+        </form>
+        <p class="auth-alt">Already have an account? <a href="login.html">Log in</a></p>
+      </div>
+
+      <div id="doneBox" class="center-text" hidden>
+        <h1>Check your email</h1>
+        <p class="sub">We sent a verification link to your college email. It is valid for 30 minutes.</p>
+        <div class="form-msg success">Development mode: the link is printed in the backend terminal instead of being emailed.</div>
+        <p class="auth-alt">Link nahi mili? <button id="resendBtn" class="linkbtn" type="button">Resend</button></p>
+        <p id="resendMsg" class="auth-alt" hidden></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
