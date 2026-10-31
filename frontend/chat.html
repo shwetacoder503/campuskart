@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat | CampusKart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-mark">CK</span> CampusKart</a>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="my-listings.html">My listings</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <div id="navAuth" class="nav-actions"></div>
+    </div>
+  </header>
+
+  <main class="container chat-wrap">
+    <p class="back"><a href="messages.html">← All messages</a></p>
+    <p id="pageStatus" class="msg">Loading...</p>
+
+    <section id="chat" hidden>
+      <a id="productBar" class="chat-product"></a>
+      <div class="safety">Meet in a public place on campus, like the canteen or library. Never pay in advance. Do not share phone numbers or emails.</div>
+
+      <div id="thread" class="thread" aria-live="polite"></div>
+
+      <div id="sendError" class="form-msg error" hidden></div>
+      <form id="sendForm" class="send-form">
+        <textarea id="sendText" rows="1" maxlength="1000" placeholder="Type a message"></textarea>
+        <button id="sendBtn" class="btn btn-brand" type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

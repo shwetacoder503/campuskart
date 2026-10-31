@@ -14,9 +14,16 @@ function parseError(data) {
   return "Something went wrong";
 }
 
+// Backend se aaye image path ko poora URL banata hai
+function imageUrl(path) {
+  return API_BASE + path;
+}
+
 async function request(method, path, body, auth) {
   const headers = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const isForm = typeof FormData !== "undefined" && body instanceof FormData;
+  // FormData ke saath Content-Type khud mat set karo, browser boundary ke saath lagata hai
+  if (body !== undefined && !isForm) headers["Content-Type"] = "application/json";
   if (auth) {
     const token = getToken();
     if (token) headers["Authorization"] = "Bearer " + token;
@@ -27,7 +34,7 @@ async function request(method, path, body, auth) {
     res = await fetch(API_BASE + path, {
       method,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
     });
   } catch (e) {
     throw new ApiError("Cannot reach server. Is the backend running?", 0);
@@ -49,3 +56,6 @@ async function request(method, path, body, auth) {
 
 const apiGet = (path, auth = false) => request("GET", path, undefined, auth);
 const apiPost = (path, body, auth = false) => request("POST", path, body, auth);
+const apiUpload = (path, formData) => request("POST", path, formData, true);
+const apiPatch = (path, body) => request("PATCH", path, body, true);
+const apiDelete = (path) => request("DELETE", path, undefined, true);

@@ -15,7 +15,7 @@ function showMsg(text, type) {
 // next param sirf simple page name allow (open redirect se bachne ke liye)
 function nextPage() {
   const next = new URLSearchParams(location.search).get("next");
-  return next && /^[a-z0-9-]+\.html$/i.test(next) ? next : "index.html";
+  return next && /^[a-z0-9-]+\.html(\?id=\d+)?$/i.test(next) ? next : "index.html";
 }
 
 form.addEventListener("submit", async (e) => {

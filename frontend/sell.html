@@ -16,7 +16,7 @@
       <nav class="nav-links">
         <a href="index.html">Browse</a>
         <a href="my-listings.html">My listings</a>
-        <a href="wishlist.html">Wishlist</a>
+        <a href="messages.html">Messages</a>
       </nav>
       <div id="navAuth" class="nav-actions"></div>
     </div>
@@ -25,11 +25,19 @@
   <main class="auth-wrap">
     <div class="auth-card form-card">
       <h1>Sell an item</h1>
-      <p class="sub">Item ki sahi details daalo. Deal campus me in-person hoti hai.</p>
+      <p class="sub">Add accurate details and real photos. Deals happen in person on campus.</p>
 
       <div id="msg" class="form-msg" hidden></div>
 
       <form id="sellForm" novalidate>
+        <div class="field">
+          <label>Photos <span class="muted">(1 to 5, up to 5 MB each)</span></label>
+          <button id="addPhotos" class="dropzone" type="button">+ Add photos</button>
+          <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+          <div id="previews" class="previews"></div>
+          <div class="hint">JPEG, PNG or WebP. The first photo is used as the cover.</div>
+        </div>
+
         <div class="field">
           <label for="title">Title</label>
           <input id="title" type="text" maxlength="150" placeholder="Casio fx-991EX Calculator" required />
@@ -62,12 +70,12 @@
         <div class="field">
           <label for="price">Price (₹)</label>
           <input id="price" type="text" inputmode="decimal" placeholder="650" required />
-          <div class="hint">Maximum ₹1,00,000, 2 decimal tak.</div>
+          <div class="hint">Maximum ₹1,00,000, up to 2 decimal places.</div>
         </div>
 
         <div class="field">
           <label for="description">Description</label>
-          <textarea id="description" rows="5" maxlength="2000" placeholder="Kitna purana hai, kya kya saath milega, kahan mil sakte ho..." required></textarea>
+          <textarea id="description" rows="5" maxlength="2000" placeholder="How old is it, what's included, where can you meet?" required></textarea>
           <div class="hint"><span id="counter">0</span> / 2000</div>
         </div>
 

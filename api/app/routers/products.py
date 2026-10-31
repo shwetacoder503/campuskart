@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Response, UploadFile
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -11,6 +11,8 @@ from app.schemas import (
     ProductList,
     ProductOut,
     ProductStatus,
+    ProductUpdate,
+    StatusUpdate,
 )
 from app.storage import MAX_BYTES, delete_image, save_image
 
@@ -50,6 +52,16 @@ def to_out(p: Product, seller_name: str, images: list[str] | None = None) -> Pro
     )
 
 
+def get_owned_product(db: Session, product_id: int, user: User) -> Product:
+    """Product laao, par sirf tab jab woh isi user ka ho."""
+    product = db.get(Product, product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    if product.seller_id != user.id:
+        raise HTTPException(status_code=403, detail="You can only change your own items")
+    return product
+
+
 @router.post("", response_model=ProductOut, status_code=201)
 def create_product(
     data: ProductCreate,
@@ -72,6 +84,31 @@ def create_product(
     return to_out(product, user.full_name)
 
 
+@router.get("/mine", response_model=ProductList)
+def my_products(
+    page: int = Query(1, ge=1),
+    size: int = Query(12, ge=1, le=50),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    # NOTE: yeh route "/{product_id}" se PEHLE hona chahiye, warna "mine" ko id samjha jayega
+    total = db.scalar(select(func.count(Product.id)).where(Product.seller_id == user.id)) or 0
+    products = db.scalars(
+        select(Product)
+        .where(Product.seller_id == user.id)
+        .order_by(Product.created_at.desc(), Product.id.desc())
+        .limit(size)
+        .offset((page - 1) * size)
+    ).all()
+    images = image_urls_for(db, [p.id for p in products])
+    return ProductList(
+        items=[to_out(p, user.full_name, images.get(p.id)) for p in products],
+        page=page,
+        size=size,
+        total=total,
+    )
+
+
 @router.post("/{product_id}/images", response_model=ProductOut, status_code=201)
 def upload_images(
     product_id: int,
@@ -79,11 +116,7 @@ def upload_images(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    product = db.get(Product, product_id)
-    if product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
-    if product.seller_id != user.id:
-        raise HTTPException(status_code=403, detail="You can only add photos to your own items")
+    product = get_owned_product(db, product_id, user)
 
     existing = db.scalar(
         select(func.count(ProductImage.id)).where(ProductImage.product_id == product_id)
@@ -170,3 +203,59 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     images = image_urls_for(db, [product_id]).get(product_id)
     return to_out(row[0], row[1], images)
+
+
+@router.patch("/{product_id}", response_model=ProductOut)
+def update_product(
+    product_id: int,
+    data: ProductUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    product = get_owned_product(db, product_id, user)
+    if product.status == "SOLD":
+        raise HTTPException(status_code=409, detail="Sold items cannot be edited")
+
+    # Sirf wahi fields jo bheji gayi hain (null wali ignore, NOT NULL columns bachane ke liye)
+    updates = {k: v for k, v in data.model_dump(exclude_unset=True).items() if v is not None}
+    if not updates:
+        raise HTTPException(status_code=400, detail="No changes provided")
+
+    for field, value in updates.items():
+        setattr(product, field, value)
+    db.commit()
+    db.refresh(product)
+    urls = image_urls_for(db, [product_id]).get(product_id)
+    return to_out(product, user.full_name, urls)
+
+
+@router.patch("/{product_id}/status", response_model=ProductOut)
+def change_status(
+    product_id: int,
+    data: StatusUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    product = get_owned_product(db, product_id, user)
+    product.status = data.status
+    db.commit()
+    db.refresh(product)
+    urls = image_urls_for(db, [product_id]).get(product_id)
+    return to_out(product, user.full_name, urls)
+
+
+@router.delete("/{product_id}", status_code=204)
+def delete_product(
+    product_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    product = get_owned_product(db, product_id, user)
+    names = db.scalars(
+        select(ProductImage.file_name).where(ProductImage.product_id == product_id)
+    ).all()
+    db.delete(product)  # product_images ki rows DB khud hata deta hai (ON DELETE CASCADE)
+    db.commit()
+    for name in names:  # disk se photo files bhi hatao
+        delete_image(name)
+    return Response(status_code=204)

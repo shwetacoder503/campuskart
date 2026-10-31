@@ -36,7 +36,7 @@ function getUser() {
 // Protected pages (sell, my listings...) ke upar yeh call karenge
 function requireLogin() {
   if (!getToken()) {
-    const page = location.pathname.split("/").pop() || "index.html";
+    const page = (location.pathname.split("/").pop() || "index.html") + location.search;
     location.href = "login.html?next=" + encodeURIComponent(page);
   }
 }

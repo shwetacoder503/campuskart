@@ -1,14 +1,3 @@
-const CATEGORIES = {
-  BOOKS: { label: "Books", bg: "#ffe4d6", fg: "#c2410c" },
-  CALCULATORS: { label: "Calculators", bg: "#e0e7ff", fg: "#4338ca" },
-  LAB_GEAR: { label: "Lab gear", bg: "#ccfbf1", fg: "#0f766e" },
-  HOSTEL: { label: "Hostel", bg: "#fce7f3", fg: "#be185d" },
-  ELECTRONICS: { label: "Electronics", bg: "#ede9fe", fg: "#6d28d9" },
-  OTHER: { label: "Other", bg: "#f3f4f6", fg: "#4b5563" },
-};
-const CONDITIONS = { NEW: "New", LIKE_NEW: "Like new", GOOD: "Good", FAIR: "Fair" };
-const STATUS_LABEL = { AVAILABLE: "Available", RESERVED: "Reserved", SOLD: "Sold" };
-
 const state = { search: "", category: "", page: 1, size: 12, shown: 0 };
 
 const gridEl = document.getElementById("grid");
@@ -18,21 +7,6 @@ const chipsEl = document.getElementById("chips");
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text; // textContent = XSS safe
-  return node;
-}
-
-function timeAgo(iso) {
-  const diff = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
-  if (diff < 60) return "just now";
-  if (diff < 3600) return Math.floor(diff / 60) + "m ago";
-  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
-  return Math.floor(diff / 86400) + "d ago";
-}
-
 function showStatus(text, isError) {
   statusEl.hidden = !text;
   statusEl.textContent = text || "";
@@ -41,12 +15,22 @@ function showStatus(text, isError) {
 
 function buildCard(p) {
   const cat = CATEGORIES[p.category] || CATEGORIES.OTHER;
-  const card = el("article", "card");
+  const card = el("a", "card");
+  card.href = "product.html?id=" + p.id;
 
   const pic = el("div", "pic");
   pic.style.background = cat.bg;
   pic.style.color = cat.fg;
-  pic.appendChild(svgIcon(p.category, 54));
+  pic.appendChild(svgIcon(p.category, 54)); // photo na ho ya load na ho toh yahi icon dikhega
+
+  if (p.images && p.images.length) {
+    const img = document.createElement("img");
+    img.src = imageUrl(p.images[0]);
+    img.alt = p.title;
+    img.loading = "lazy";
+    img.addEventListener("error", () => img.remove());
+    pic.appendChild(img);
+  }
   pic.appendChild(el("span", "cond", CONDITIONS[p.itemCondition] || p.itemCondition));
   card.appendChild(pic);
 
@@ -54,7 +38,7 @@ function buildCard(p) {
   body.appendChild(el("div", "title", p.title));
 
   const row = el("div", "row");
-  row.appendChild(el("span", "price", "₹" + Number(p.price).toLocaleString("en-IN")));
+  row.appendChild(el("span", "price", formatPrice(p.price)));
   row.appendChild(el("span", "status " + p.status, STATUS_LABEL[p.status] || p.status));
   body.appendChild(row);
 

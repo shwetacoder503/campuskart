@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Item | CampusKart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-mark">CK</span> CampusKart</a>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="my-listings.html">My listings</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <div id="navAuth" class="nav-actions"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="back"><a href="index.html">← Back to browse</a></p>
+    <p id="pageStatus" class="msg">Loading...</p>
+    <div id="productBox"></div>
+  </main>
+    <dialog id="msgDialog">
+    <form id="msgForm" class="dialog-body" novalidate>
+      <h2>Message seller</h2>
+      <p id="msgFor" class="sub"></p>
+      <div id="msgError" class="form-msg error" hidden></div>
+      <div class="field">
+        <label for="msgText">Your message</label>
+        <textarea id="msgText" rows="4" maxlength="1000"></textarea>
+        <div class="hint">Phone numbers and email addresses are not allowed in chat. Meet in a public place on campus.</div>
+      </div>
+      <div class="dialog-actions">
+        <button id="msgCancel" class="btn btn-ghost" type="button">Cancel</button>
+        <button id="msgSend" class="btn btn-brand" type="submit">Send message</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>

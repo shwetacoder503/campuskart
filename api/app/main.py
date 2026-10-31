@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
-from app.routers import auth, products, users
+from app.routers import auth, chat, products, users
 from app.storage import UPLOAD_DIR
 
 app = FastAPI(title="CampusKart API")
@@ -19,6 +19,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(products.router)
+app.include_router(chat.router)
 
 # Upload ki hui photos yahan se milti hain: /uploads/<file>.jpg
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")

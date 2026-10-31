@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My listings | CampusKart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-mark">CK</span> CampusKart</a>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="my-listings.html">My listings</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <div id="navAuth" class="nav-actions"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <h1>My listings</h1>
+      <a href="sell.html" class="btn btn-brand">Sell an item</a>
+    </div>
+
+    <div id="msg" class="form-msg" hidden></div>
+    <p id="loading" class="msg">Loading...</p>
+    <div id="list"></div>
+    <div id="empty" class="msg" hidden>
+      You have not listed anything yet. <a href="sell.html" class="linkbtn">Sell your first item</a>
+    </div>
+    <div class="center"><button id="loadMore" class="btn btn-ghost" hidden>Load more</button></div>
+  </main>
+
+  <dialog id="editDialog">
+    <form id="editForm" class="dialog-body" novalidate>
+      <h2>Edit item</h2>
+      <div id="editMsg" class="form-msg error" hidden></div>
+
+      <div class="field">
+        <label for="eTitle">Title</label>
+        <input id="eTitle" type="text" maxlength="150" required />
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="eCategory">Category</label>
+          <select id="eCategory">
+            <option value="BOOKS">Books</option>
+            <option value="CALCULATORS">Calculators</option>
+            <option value="LAB_GEAR">Lab gear</option>
+            <option value="HOSTEL">Hostel</option>
+            <option value="ELECTRONICS">Electronics</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="eCondition">Condition</label>
+          <select id="eCondition">
+            <option value="NEW">New</option>
+            <option value="LIKE_NEW">Like new</option>
+            <option value="GOOD">Good</option>
+            <option value="FAIR">Fair</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="ePrice">Price (₹)</label>
+        <input id="ePrice" type="text" inputmode="decimal" required />
+      </div>
+
+      <div class="field">
+        <label for="eDesc">Description</label>
+        <textarea id="eDesc" rows="5" maxlength="2000" required></textarea>
+        <div class="hint">Photos cannot be changed yet.</div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="cancelBtn" class="btn btn-ghost" type="button">Cancel</button>
+        <button id="saveBtn" class="btn btn-brand" type="submit">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/my-listings.js"></script>
+</body>
+</html>
